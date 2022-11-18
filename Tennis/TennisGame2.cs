@@ -27,6 +27,8 @@ namespace Tennis
         public string GetScore()
         {
             var score = "";
+
+            // For Equal scores
             if (p1point == p2point && p1point < 3)
             {
                 if (p1point == 0)
@@ -40,6 +42,7 @@ namespace Tennis
             if (p1point == p2point && p1point > 2)
                 score = "Deuce";
 
+            // For Normal scores
             if (p1point > 0 && p2point == 0)
             {
                 if (p1point == 1)
@@ -90,6 +93,7 @@ namespace Tennis
                 score = p1res + "-" + p2res;
             }
 
+            // For Has advantage
             if (p1point > p2point && p2point >= 3)
             {
                 score = $"Advantage {player1Name}";
@@ -100,6 +104,7 @@ namespace Tennis
                 score = $"Advantage {player2Name}";
             }
 
+            // For Has a winner
             if (p1point >= 4 && p2point >= 0 && (p1point - p2point) >= 2)
             {
                 score = $"Win for {player1Name}";
@@ -108,6 +113,7 @@ namespace Tennis
             {
                 score = $"Win for {player2Name}";
             }
+
             return score;
         }
 
