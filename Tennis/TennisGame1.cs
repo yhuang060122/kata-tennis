@@ -23,21 +23,17 @@ namespace Tennis
 
         public string GetScore()
         {
-            string score;
-            if (m_score1 == m_score2)
-            {
-                score = GetEqualScore(m_score1);
-            }
-            else if (m_score1 >= 4 || m_score2 >= 4)
-            {
-                score = GetWinnerOrAdvantageScore(m_score1, m_score2);
-            }
-            else
-            {
-                score = GetNomalScore(m_score1, m_score2);
-            }
-            return score;
+            if (IsEqualScore)
+                return GetEqualScore(m_score1);
+
+            if (HasWinnerOrAdvantage)
+                return GetWinnerOrAdvantageScore(m_score1, m_score2);
+
+            return GetNomalScore(m_score1, m_score2);
         }
+
+        private bool IsEqualScore => m_score1 == m_score2;
+        private bool HasWinnerOrAdvantage => m_score1 >= 4 || m_score2 >= 4;
 
         private static string GetNomalScore(int m_score1, int m_score2)
         {
