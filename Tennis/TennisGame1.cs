@@ -15,7 +15,7 @@ namespace Tennis
 
         public void WonPoint(string playerName)
         {
-            if (playerName == this.player1Name)
+            if (playerName == player1Name)
                 m_score1 += 1;
             else
                 m_score2 += 1;
@@ -35,12 +35,12 @@ namespace Tennis
         private bool IsEqualScore => m_score1 == m_score2;
         private bool HasWinnerOrAdvantage => m_score1 >= 4 || m_score2 >= 4;
 
-        private static string GetNomalScore(int m_score1, int m_score2)
+        private string GetNomalScore(int m_score1, int m_score2)
         {
             return GetSimpleScore(m_score1) + "-" + GetSimpleScore(m_score2);
         }
 
-        private static string GetSimpleScore(int m_score)
+        private string GetSimpleScore(int m_score)
         {
             return m_score switch
             {
@@ -52,19 +52,19 @@ namespace Tennis
             };
         }
 
-        private static string GetWinnerOrAdvantageScore(int m_score1, int m_score2)
+        private string GetWinnerOrAdvantageScore(int m_score1, int m_score2)
         {
             var minusResult = m_score1 - m_score2;
             return minusResult switch
             {
-                1 => "Advantage player1",
-                -1 => "Advantage player2",
-                >= 2 => "Win for player1",
-                _ => "Win for player2",
+                1 => $"Advantage {player1Name}",
+                -1 => $"Advantage {player2Name}",
+                >= 2 => $"Win for {player1Name}",
+                _ => $"Win for {player2Name}",
             };
         }
 
-        private static string GetEqualScore(int m_score)
+        private string GetEqualScore(int m_score)
         {
             return m_score switch
             {
