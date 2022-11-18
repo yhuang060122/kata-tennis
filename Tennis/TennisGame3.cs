@@ -1,3 +1,5 @@
+using System;
+
 namespace Tennis
 {
     public class TennisGame3 : ITennisGame
@@ -6,6 +8,7 @@ namespace Tennis
         private int p1Pts;
         private readonly string p1Name;
         private readonly string p2Name;
+        private static readonly string[] simpleScores = { "Love", "Fifteen", "Thirty", "Forty" };
 
         public TennisGame3(string player1Name, string player2Name)
         {
@@ -23,22 +26,26 @@ namespace Tennis
 
         public string GetScore()
         {
-            string score;
-            if ((p1Pts < 4 && p2Pts < 4) && (p1Pts + p2Pts < 6))
+            if (IsNoPlayerFourWinsOrDeuce)
             {
-                string[] simpleScores = { "Love", "Fifteen", "Thirty", "Forty" };
-                score = simpleScores[p1Pts];
-                return (p1Pts == p2Pts) ? score + "-All" : score + "-" + simpleScores[p2Pts];
+                return (IsEqualScore) 
+                    ? $"{simpleScores[p1Pts]}-All" 
+                    : $"{simpleScores[p1Pts]}-{simpleScores[p2Pts]}";
             }
             else
             {
-                if (p1Pts == p2Pts)
+                if (IsEqualScore)
                     return "Deuce";
-                score = p1Pts > p2Pts ? p1Name : p2Name;
-                return ((p1Pts - p2Pts) * (p1Pts - p2Pts) == 1) ? "Advantage " + score : "Win for " + score;
+
+                var pName = p1Pts > p2Pts ? p1Name : p2Name;
+                return (Math.Abs(p1Pts - p2Pts) == 1) 
+                    ? $"Advantage {pName}" 
+                    : $"Win for {pName}";
             }
         }
 
+        private bool IsEqualScore => p1Pts == p2Pts;
+        private bool IsNoPlayerFourWinsOrDeuce => (p1Pts < 4 && p2Pts < 4) && (p1Pts + p2Pts < 6);
     }
 }
 
