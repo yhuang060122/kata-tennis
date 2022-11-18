@@ -26,23 +26,34 @@ namespace Tennis
 
         public string GetScore()
         {
-            var score = "";
-
             // For Equal scores
-            if (p1point == p2point && p1point < 3)
-            {
-                if (p1point == 0)
-                    score = "Love";
-                if (p1point == 1)
-                    score = "Fifteen";
-                if (p1point == 2)
-                    score = "Thirty";
-                score += "-All";
-            }
-            if (p1point == p2point && p1point > 2)
-                score = "Deuce";
+            string score = GetEqualScore();
+
+            if (!string.IsNullOrEmpty(score))
+                return score;
+
+            // For Has a winner
+            score = GetWinnerScore();
+
+            if (!string.IsNullOrEmpty(score))
+                return score;
+
+            // For Has advantage
+            score = GetAdvantageScore();
+
+            if (!string.IsNullOrEmpty(score))
+                return score;
 
             // For Normal scores
+            score = GetNormalScore();
+
+            return score;
+        }
+
+        private string GetNormalScore()
+        {
+            string score = "";
+
             if (p1point > 0 && p2point == 0)
             {
                 if (p1point == 1)
@@ -93,18 +104,13 @@ namespace Tennis
                 score = p1res + "-" + p2res;
             }
 
-            // For Has advantage
-            if (p1point > p2point && p2point >= 3)
-            {
-                score = $"Advantage {player1Name}";
-            }
+            return score;
+        }
 
-            if (p2point > p1point && p1point >= 3)
-            {
-                score = $"Advantage {player2Name}";
-            }
+        private string GetWinnerScore()
+        {
+            string score = "";
 
-            // For Has a winner
             if (p1point >= 4 && p2point >= 0 && (p1point - p2point) >= 2)
             {
                 score = $"Win for {player1Name}";
@@ -117,6 +123,40 @@ namespace Tennis
             return score;
         }
 
+        private string GetAdvantageScore()
+        {
+            string score = "";
+
+            if (p1point > p2point && p2point >= 3)
+            {
+                score = $"Advantage {player1Name}";
+            }
+
+            if (p2point > p1point && p1point >= 3)
+            {
+                score = $"Advantage {player2Name}";
+            }
+
+            return score;
+        }
+
+        private string GetEqualScore()
+        {
+            string score = "";
+            if (p1point == p2point && p1point < 3)
+            {
+                if (p1point == 0)
+                    score = "Love";
+                if (p1point == 1)
+                    score = "Fifteen";
+                if (p1point == 2)
+                    score = "Thirty";
+                score += "-All";
+            }
+            if (p1point == p2point && p1point > 2)
+                score = "Deuce";
+            return score;
+        }
     }
 }
 
