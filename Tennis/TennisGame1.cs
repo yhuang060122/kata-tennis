@@ -41,55 +41,42 @@ namespace Tennis
 
         private static string GetNomalScore(int m_score1, int m_score2)
         {
-            string score = "";
-            for (var i = 1; i < 3; i++)
-            {
-                int tempScore;
-                if (i == 1) tempScore = m_score1;
-                else { score += "-"; tempScore = m_score2; }
-                switch (tempScore)
-                {
-                    case 0:
-                        score += "Love";
-                        break;
-                    case 1:
-                        score += "Fifteen";
-                        break;
-                    case 2:
-                        score += "Thirty";
-                        break;
-                    case 3:
-                        score += "Forty";
-                        break;
-                    default:
-                        break;
-                }
-            }
+            return GetSimpleScore(m_score1) + "-" + GetSimpleScore(m_score2);
+        }
 
-            return score;
+        private static string GetSimpleScore(int m_score)
+        {
+            return m_score switch
+            {
+                0 => "Love",
+                1 => "Fifteen",
+                2 => "Thirty",
+                3 => "Forty",
+                _ => "",
+            };
         }
 
         private static string GetWinnerOrAdvantageScore(int m_score1, int m_score2)
         {
-            string score;
             var minusResult = m_score1 - m_score2;
-            if (minusResult == 1) score = "Advantage player1";
-            else if (minusResult == -1) score = "Advantage player2";
-            else if (minusResult >= 2) score = "Win for player1";
-            else score = "Win for player2";
-            return score;
+            return minusResult switch
+            {
+                1 => "Advantage player1",
+                -1 => "Advantage player2",
+                >= 2 => "Win for player1",
+                _ => "Win for player2",
+            };
         }
 
         private static string GetEqualScore(int m_score)
         {
-            string score = m_score switch
+            return m_score switch
             {
                 0 => "Love-All",
                 1 => "Fifteen-All",
                 2 => "Thirty-All",
                 _ => "Deuce",
             };
-            return score;
         }
 
 
