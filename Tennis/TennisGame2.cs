@@ -1,3 +1,5 @@
+using System;
+
 namespace Tennis
 {
     public class TennisGame2 : ITennisGame
@@ -52,72 +54,26 @@ namespace Tennis
 
         private string GetNormalScore()
         {
-            string score = "";
-
-            if (p1point > 0 && p2point == 0)
+            string getSimpleScore(int pt) => pt switch
             {
-                if (p1point == 1)
-                    p1res = "Fifteen";
-                if (p1point == 2)
-                    p1res = "Thirty";
-                if (p1point == 3)
-                    p1res = "Forty";
+                0 => "Love",
+                1 => "Fifteen",
+                2 => "Thirty",
+                3 => "Forty",
+                _ => "",
+            };
 
-                p2res = "Love";
-                score = p1res + "-" + p2res;
-            }
-            if (p2point > 0 && p1point == 0)
-            {
-                if (p2point == 1)
-                    p2res = "Fifteen";
-                if (p2point == 2)
-                    p2res = "Thirty";
-                if (p2point == 3)
-                    p2res = "Forty";
-
-                p1res = "Love";
-                score = p1res + "-" + p2res;
-            }
-
-            if (p1point > p2point && p1point < 4)
-            {
-                if (p1point == 2)
-                    p1res = "Thirty";
-                if (p1point == 3)
-                    p1res = "Forty";
-                if (p2point == 1)
-                    p2res = "Fifteen";
-                if (p2point == 2)
-                    p2res = "Thirty";
-                score = p1res + "-" + p2res;
-            }
-            if (p2point > p1point && p2point < 4)
-            {
-                if (p2point == 2)
-                    p2res = "Thirty";
-                if (p2point == 3)
-                    p2res = "Forty";
-                if (p1point == 1)
-                    p1res = "Fifteen";
-                if (p1point == 2)
-                    p1res = "Thirty";
-                score = p1res + "-" + p2res;
-            }
-
-            return score;
+            
+            return getSimpleScore(p1point) + "-" + getSimpleScore(p2point);
         }
 
         private string GetWinnerScore()
         {
             string score = "";
 
-            if (p1point >= 4 && p2point >= 0 && (p1point - p2point) >= 2)
+            if (HasWinner)
             {
-                score = $"Win for {player1Name}";
-            }
-            if (p2point >= 4 && p1point >= 0 && (p2point - p1point) >= 2)
-            {
-                score = $"Win for {player2Name}";
+                score = p1point > p2point ? $"Win for {player1Name}" : $"Win for {player2Name}";
             }
 
             return score;
@@ -127,14 +83,16 @@ namespace Tennis
         {
             string score = "";
 
-            if (p1point > p2point && p2point >= 3)
+            if (HasAdvantage)
             {
-                score = $"Advantage {player1Name}";
-            }
-
-            if (p2point > p1point && p1point >= 3)
-            {
-                score = $"Advantage {player2Name}";
+                if (p1point > p2point)
+                {
+                    score = $"Advantage {player1Name}";
+                }
+                else
+                {
+                    score = $"Advantage {player2Name}";
+                }
             }
 
             return score;
@@ -143,20 +101,32 @@ namespace Tennis
         private string GetEqualScore()
         {
             string score = "";
-            if (p1point == p2point && p1point < 3)
+            if (IsEqualScore)
             {
-                if (p1point == 0)
-                    score = "Love";
-                if (p1point == 1)
-                    score = "Fifteen";
-                if (p1point == 2)
-                    score = "Thirty";
-                score += "-All";
+                if (p1point < 3)
+                {
+                    score = p1point switch
+                    {
+                        0 => "Love",
+                        1 => "Fifteen",
+                        2 => "Thirty",
+                        _ => "",
+                    };
+                    score += "-All";
+                }
+                else
+                {
+                    score = "Deuce";
+                }
             }
-            if (p1point == p2point && p1point > 2)
-                score = "Deuce";
             return score;
         }
+
+        private bool IsEqualScore => p1point == p2point;
+
+        private bool HasAdvantage => Math.Abs(p1point - p2point) == 1 && (p1point >= 4 || p2point >= 4);
+
+        private bool HasWinner => Math.Abs(p1point - p2point) > 1 && (p1point >= 4 || p2point >= 4);
     }
 }
 
